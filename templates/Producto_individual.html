@@ -1,0 +1,333 @@
+{% extends 'template.html' %}
+{% block head %}
+<title>Producto Individual</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Producto_individual.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/todos_los_comentarios.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/gestion_comentario.css') }}">
+<script src="{{ url_for ('static', filename='Js/gestion_comentario.js') }}"></script>
+<script src="{{ url_for ('static', filename='Js/Producto_individual.js') }}"></script>
+{% endblock %}
+
+{% block contenido %}
+<div class="contenedorGlobal">
+
+  <div class="vistageneral">
+
+    {% if Producto_Referencia %}
+    <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active " data-interval="10000">
+          <img src="{{ url_for('static', filename='imagenes/lista_de_productos/'+item['referencia']+'.jpg') }}"
+            class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item" data-interval="2000">
+          <img src="{{ url_for('static', filename='imagenes/lista_de_productos/'+item['referencia']+'.jpg') }}"
+            class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item ">
+          <img src="{{ url_for('static', filename='imagenes/lista_de_productos/'+item['referencia']+'.jpg') }}"
+            class="d-block w-100" alt="...">
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" style="background-color: #646464; height: 30px; border-radius: 85%;"
+          aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" style="background-color: #646464; height: 30px; border-radius: 85%;"
+          aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+
+
+  </div>
+
+  <div class="barrainformacion">
+    <h4 style="color:#E74236; margin-bottom: 15px;"><strong>{{ item.nombre }}</strong> </h4>
+    <h4 style="color:#242942; margin-bottom: 15px; "><strong>{{ item.referencia }}</strong> </h4>
+    <span>
+      <p style="color:#E74236; font-size: 20px; text-align: center;"> <strong>${{item.precio}}</strong>
+      </p>
+    </span>
+
+    <form
+    {% if g.user %}
+    action="{{ url_for('agregar_carrito', documento=g.user.documento, referencia=item.referencia ) }}"
+    {% else %}
+    action="{{ url_for('login') }}"
+    {% endif %}
+    method="post">
+      <h5> Seleccionar talla </h5>
+    <div class="Talla">
+      {{ filtro.talla(class="form-control mb-1 casillas")}}
+    </div>
+    <h5> Seleccionar color </h5>
+    <div class="Color">
+      {{ filtro.color(class="form-control mb-1 casillas")}}
+    </div>
+    <br><br>
+    <button class="btn btn-outline-one"> Agregar al carrito </button>
+    </form>
+
+    <br><br>
+
+    <h4 style="color:#E74236"> Garantía </h4>
+    <br>
+    <p style="color:#242942; text-align: justify;"> Un beneficio exclusivo de comprar en la tienda oficial de New
+      Balance Colombia es que todas tus compras viajan aseguradas hasta que son recibidas en tus manos. Además de esto
+      contamos con unas políticas de cambios y devoluciones pensadas para brindarte la mejor experiencia de compra
+      posible. Te invitamos a conocerla visitando nuestra sección de políticas de cambios de devoluciones.</p>
+
+  </div>
+
+  <div class="infomodelos">
+    <div class="card text-center">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:abrir1()" id="pri"> <strong> Descripción </strong></a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body">
+        <article id="tab1">
+          <div class="row" style="text-align: justify; padding: 0px 10px;">
+            {{item.descripcion}}
+          </div>
+
+        </article>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="OpinionesProducto">
+    <br>
+    <h2 style="text-align: center;">Opiniones sobre el producto</h2>
+    <br>
+    {% for item in promedio_comentarios %}
+    <h1 style="font-size: 65px; color:#E74236; text-align: center;">{{ item.promedio }}</h1>
+    <h6 style="text-align: center;">Promedio entre {{ lista_comentarios|length }} opiniones</h6>
+    {% endfor %}
+  </div>
+
+  <div class="Comentarios">
+    {% for item in tres_registros %}
+    <div class="item-comentario ">
+      <div class="datos">
+        <h4 style="color: #E74236;">{{ item.nickname}}</h4>
+        <div class="rating" style="font-size: 20px;">
+          <span class="estrella" id="estrella5" >
+            {% if item.puntuacion < 5 %}☆
+            {% else %}★
+            {% endif %}
+        </span>
+        <span class="estrella" id="estrella4">
+            {% if item.puntuacion < 4 %}☆
+            {% else %}★
+            {% endif %}
+        </span>
+        <span class="estrella" id="estrella3">
+            {% if item.puntuacion < 3 %}☆
+            {% else %}★
+            {% endif %}
+        </span>
+        <span class="estrella" id="estrella2">
+            {% if item.puntuacion < 2 %}☆
+            {% else %}★
+            {% endif %}
+        </span>
+        <span class="estrella" id="estrella1">
+            {% if item.puntuacion < 1 %}☆
+            {% else %}★
+            {% endif %}
+        </span>
+        </div>
+      </div>
+      <div class="comentario">
+        <p>{{ item.comentario }}</p>
+      </div>
+    </div>
+    {% endfor %}
+
+    <button type="button" class="btn btn-outline-one" data-toggle="modal" data-target="#exampleModal"
+      style="margin-left: 40%; margin-top: 10px;">
+      Ver todas las calificaciones
+    </button>
+--
+{% if mensaje %}
+<h2 style="text-align: center; color: #058714; margin-top: 10px">{{ mensaje }}</h2>
+{% endif %}
+{% if error %}
+<h2 style="text-align: center; color: #970c02; margin-top: 10px">{{ error }}</h2>
+{% endif %}
+{% if formG %}
+<a data-toggle="modal" href="#exampleModal">
+    crear comentario
+</a>
+
+<!-- Modal -->
+
+<div class="modal fade modal-comentario" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>Comentario</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form
+            {% if opcion=="Editar" %}
+                action="{{ url_for('editar_comentario', referencia=item.referencia ,puntuacion=0,documento=g.user.documento) }}"
+            {% else %}
+                action="{{ url_for('crear_comentario', referencia=item.referencia ,puntuacion = 0, documento=g.user.documento) }}"
+            {% endif %}
+            id="gestionarComentario" method="POST">
+            {{ formG.hidden_tag() }}
+                <div class="modal-body">
+                    <a class="cuenta-modal">
+                        <span class="material-icons-outlined md-48">person</span>
+                        <p style="margin-top: 1rem;">Los comentarios son públicos y contienen información de tu cuenta y el producto comprado.</p>
+                    </a>
+                    {% if calificacion %}
+                        <div class="rating">
+                            <span class="estrella" id="estrella5" onclick="puntuacionEstrella(5,'{{opcion}}','{{calificacion.referencia_producto}}','{{calificacion.documento}}')">
+                                {% if calificacion.puntuacion < 5 %}☆
+                                {% else %}★
+                                {% endif %}
+                            </span>
+                            <span class="estrella" id="estrella4" onclick="puntuacionEstrella(4,'{{opcion}}','{{calificacion.referencia_producto}}','{{calificacion.documento}}')">
+                                {% if calificacion.puntuacion < 4 %}☆
+                                {% else %}★
+                                {% endif %}
+                            </span>
+                            <span class="estrella" id="estrella3" onclick="puntuacionEstrella(3,'{{opcion}}','{{calificacion.referencia_producto}}','{{calificacion.documento}}')">
+                                {% if calificacion.puntuacion < 3 %}☆
+                                {% else %}★
+                                {% endif %}
+                            </span>
+                            <span class="estrella" id="estrella2" onclick="puntuacionEstrella(2,'{{opcion}}','{{calificacion.referencia_producto}}','{{calificacion.documento}}')">
+                                {% if calificacion.puntuacion < 2 %}☆
+                                {% else %}★
+                                {% endif %}
+                            </span>
+                            <span class="estrella" id="estrella1" onclick="puntuacionEstrella(1,'{{opcion}}','{{calificacion.referencia_producto}}','{{calificacion.documento}}')">
+                                {% if calificacion.puntuacion < 1 %}☆
+                                {% else %}★
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% else %}
+                        {% if calificacionCrear %}
+                            <div class="rating">
+                                <span class="estrella" id="estrella5" onclick="puntuacionEstrella(5,'{{opcion}}','{{calificacionCrear.referencia_producto}}','{{calificacionCrear.documento}}')">☆</span>
+                                <span class="estrella" id="estrella4" onclick="puntuacionEstrella(4,'{{opcion}}','{{calificacionCrear.referencia_producto}}','{{calificacionCrear.documento}}')">☆</span>
+                                <span class="estrella" id="estrella3" onclick="puntuacionEstrella(3,'{{opcion}}','{{calificacionCrear.referencia_producto}}','{{calificacionCrear.documento}}')">☆</span>
+                                <span class="estrella" id="estrella2" onclick="puntuacionEstrella(2,'{{opcion}}','{{calificacionCrear.referencia_producto}}','{{calificacionCrear.documento}}')">☆</span>
+                                <span class="estrella" id="estrella1" onclick="puntuacionEstrella(1,'{{opcion}}','{{calificacionCrear.referencia_producto}}','{{calificacionCrear.documento}}')">☆</span>
+                            </div>
+                            <h3 style="padding: 0%;">{{calificacionCrear.nickname}}</h3>
+                        {% endif %}
+                        {% if calificacion %}
+                            <h3 style="padding: 0%;">{{calificacion.nickname}}</h3>
+                        {% endif %}
+                        <h3 style="padding: 0%;">Opinión</h3>
+                        {{ formG.comentario(class="form-control") }}
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    {% if calificacion %}
+                    <a href="{{ url_for('delete_comentario', id=calificacion.id) }}">
+                        <button type="button" class="btn btn-outline-one">Eliminar</button>
+                    </a>
+                    {% endif %}
+                    <button type="submit" class="btn btn-outline-one">{{opcion}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+    <!-- Modal -->
+
+    <div class="modal fade modal-comentario" id="exampleModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            {% if lista_comentarios %}
+            <h1 class="modal-title" id="exampleModalLabel">Opiniones sobre el producto</h1>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <a class="cuenta-modal">
+
+              <!-- división para hacer un resumen de los comentarios  -->
+              <div class="row resumen">
+                <div class="col puntuacion_promedio">
+                  <!-- Puntuación promedio -->
+                  {% for item in promedio_comentario %}
+                    <h1 style="font-size: 65px; color:#E74236; text-align: center;">{{ item.promedio }}</h1>
+                    <h6 style="text-align: center;">Promedio entre {{ lista_comentarios|length }} opiniones</h6>
+                    {% endfor %}
+                  <h4>{{promedio}}</h4>
+                  <!-- Total de comentarios -->
+                  <h5>Promedio entre {{lista_comentarios|length}} opiniones</h5>
+                </div>
+              </div>
+            </a>
+
+            <!-- Aquí van los comentarios -->
+            <section class="lista-comentarios comentarios">
+              {% for item in lista_comentarios %}
+              <div class="item-comentario ">
+                <div class="datos">
+                  <h4 style="color:#E74236">{{ item.nickname}}</h4>
+                  <div class="rating" style="font-size: 20px;">
+                    <span class="estrella" id="estrella5" >
+                      {% if item.puntuacion < 5 %}☆
+                      {% else %}★
+                      {% endif %}
+                  </span>
+                  <span class="estrella" id="estrella4">
+                      {% if item.puntuacion < 4 %}☆
+                      {% else %}★
+                      {% endif %}
+                  </span>
+                  <span class="estrella" id="estrella3">
+                      {% if item.puntuacion < 3 %}☆
+                      {% else %}★
+                      {% endif %}
+                  </span>
+                  <span class="estrella" id="estrella2">
+                      {% if item.puntuacion < 2 %}☆
+                      {% else %}★
+                      {% endif %}
+                  </span>
+                  <span class="estrella" id="estrella1">
+                      {% if item.puntuacion < 1 %}☆
+                      {% else %}★
+                      {% endif %}
+                  </span>
+                  </div>
+                </div>
+                <div class="comentario">
+                  <p>{{ item.comentario }}</p>
+                </div>
+              </div>
+              {% endfor %}
+            </section>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% endblock %}

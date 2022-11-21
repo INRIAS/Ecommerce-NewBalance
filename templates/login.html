@@ -1,0 +1,45 @@
+{% extends 'template.html' %}
+{% block head %}
+<title>Login</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+{% if mensaje %}
+    <h2 style="text-align: center; color: #058714; margin-top: 10px">{{ mensaje }}</h2>
+{% endif %}
+{% if error %}
+    <h2 style="text-align: center; color: #970c02; margin-top: 10px">{{ error }}</h2>
+{% endif %}
+
+<div class="ContenedorFormulario">
+    {% if form %}
+    <form class="formulario-login" action="{{ url_for('login') }}" method="POST" >
+        {{form.hidden_tag()}}
+        <div>
+            <h1 style="text-align: center;">Iniciar sesión</h1>
+            <div>
+                <div class="mb-3">
+                    {{form.correo(type="email", class="form-control", placeholder="Ingresa tu email")}}
+                    <!-- <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa tu email"> -->
+                </div>
+                <div class="mb-3">
+                    {{form.contrasena(type="password",class="form-control", id="exampleInputPassword1", placeholder="Ingresa tu contraseña")}}
+                    <!-- <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Ingresa tu contraseña"> -->
+                </div>
+                <!-- <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Acepta términos y condiciones</label>
+                </div> -->
+                <div class="btn-login">
+                    {{form.login(id="iniciar", class="btn btn-outline-login")}}
+                    <!-- <button id="iniciar" type="submit" class="btn btn-outline-login">Iniciar Sesión</button> -->
+                    <a href="{{url_for('registro')}}" id="registrarse" class="btn btn-outline-login"> Regístrate </a>
+                </div>
+                <p><a href="">¿olvidaste tu contraseña?</a></p>
+    </form>
+    {% endif %}
+</div>
+</div>
+{% endblock %}
