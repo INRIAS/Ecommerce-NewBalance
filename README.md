@@ -1,3 +1,1 @@
 # Ecommerce-NewBalance
-Flask
-Python
